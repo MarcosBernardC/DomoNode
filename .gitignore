@@ -1,0 +1,28 @@
+# --- Firmware (Microchip XC8) ---
+firmware/build/
+ccreport/
+*.elf
+*.hex
+*.cmf
+*.lst
+*.sym
+*.sdb
+*.hxl
+*.p1
+*.d
+*.i
+*.rlf
+
+# --- Documentación (LaTeX) ---
+docs/
+*.aux
+*.log
+*.out
+*.toc
+*.pdf
+*.fdb_latexmk
+*.fls
+
+# --- Sistema y otros ---
+.DS_Store
+Thumbs.db
