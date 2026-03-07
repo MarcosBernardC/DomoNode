@@ -52,7 +52,8 @@ $(TEX_TARGETS): %:
 	@$(eval SOURCE_PATH := $(shell find research -name "$*.tex" -print -quit))
 	@mkdir -p $(L_BUILD)
 	@echo "📄 Generando: $(SOURCE_PATH) -> $(L_BUILD)/$@.pdf"
-	@$(LATEXMK) $(L_FLAGS) -jobname=$@ $(SOURCE_PATH) > /dev/null
+	# Añadimos -f para ignorar falta de bibliografía y quitamos el silenciador temporalmente
+	@$(LATEXMK) $(L_FLAGS) -f -jobname=$@ $(SOURCE_PATH)
 	@echo "✅ DOCS: $(L_BUILD)/$@.pdf generado."
 
 ## --- Sección de Limpieza Explícita ---
