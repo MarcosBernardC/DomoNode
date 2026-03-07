@@ -14,12 +14,12 @@ ccreport/
 *.rlf
 
 # --- Documentación (LaTeX) ---
-docs/
+research/build/
 *.aux
 *.log
 *.out
 *.toc
-*.pdf
+#*.pdf
 *.fdb_latexmk
 *.fls
 

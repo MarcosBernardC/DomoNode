@@ -1,0 +1,74 @@
+\documentclass[12pt,a4paper]{article}
+
+% --- Paquetes Esenciales ---
+\usepackage[spanish, es-tabla]{babel}
+\usepackage{fontspec}        % Necesario para LuaLaTeX
+\usepackage{amsmath, amsfonts, amssymb} % Matemáticas de ingeniería
+\usepackage{graphicx}        % Para diagramas de circuitos y esquemáticos
+\usepackage{geometry}        % Márgenes profesionales
+\usepackage{xcolor}          % Colores para el código
+\usepackage{listings}        % Para insertar tu código C (XC8)
+\usepackage{fancyhdr}        % Encabezados y pies de página
+\usepackage{hyperref}        % Enlaces internos y externos
+
+% --- Configuración de Página ---
+\geometry{top=2.5cm, bottom=2.5cm, left=3cm, right=3cm}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{DomoNode: Reporte Técnico}
+\rhead{Marcos Bernard C.}
+\lfoot{\scriptsize Licencia CC BY-NC-SA 4.0}
+\rfoot{\thepage}
+
+% --- Configuración de Código (Estilo XC8) ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\lstset{
+    language=C,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{codegreen},
+    stringstyle=\color{orange},
+    numberstyle=\tiny\color{codegray},
+    numbers=left,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{gray!5}
+}
+
+% --- Datos del Documento ---
+\title{\textbf{DomoNode: Arquitectura y Desarrollo de Nodos IoT}}
+\author{Marcos Bernard Calixto \\ \small Ingeniería Electrónica}
+\date{Marzo 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este documento describe el desarrollo del nodo \texttt{DomoNode}, integrando firmware optimizado en C, gestión de energía y conectividad cloud con Supabase. El enfoque principal es la escalabilidad y el uso de estándares industriales en domótica.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introducción}
+El proyecto \textbf{DomoNode} surge como una solución modular para...
+
+\section{Hardware e Investigación}
+Para este nodo, se ha seleccionado el microcontrolador [Modelo] debido a su gestión de interrupciones y bajo consumo en modo \textit{Deep Sleep}...
+
+\section{Firmware (XC8)}
+A continuación, se muestra la inicialización de los registros del sistema:
+
+\begin{lstlisting}[caption=Inicialización base del sistema]
+#include <xc.h>
+
+void system_init(void) {
+    // Configuración de oscilador y puertos
+    TRISB = 0x00; 
+    PORTB = 0x00;
+}
+\end{lstlisting}
+
+\end{document}

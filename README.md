@@ -38,7 +38,7 @@ Bajo los siguientes términos:
 - **No Comercial**: No puede utilizar el material con fines comerciales.
 - **Compartir Igual**: Si remezcla, transforma o crea a partir del material, debe distribuir sus contribuciones bajo la misma licencia que el original.
 
-Para más detalles, consulte el archivo [LICENSE](./LICENSE) o visite [Creative Commons](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+Para más detalles, consulte ddel archivo [LICENSE](./LICENSE) o visite [Creative Commons](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 ---
 
