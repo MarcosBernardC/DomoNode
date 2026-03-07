@@ -15,6 +15,7 @@ ccreport/
 
 # --- Documentación (LaTeX) ---
 research/build/
+*.tex
 *.aux
 *.log
 *.out
