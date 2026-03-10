@@ -1,0 +1,75 @@
+\documentclass[journal,10pt]{IEEEtran}
+
+% --- Paquetes de Estética Superior ---
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{fontspec} 
+\usepackage{microtype} % Optimiza el espaciado entre letras y palabras
+
+% Fuentes del sistema (Modernas y abiertas)
+\setmainfont{Latin Modern Roman}[Scale=1.05] % Un poco más grande para evitar lo "chico"
+\setsansfont{Roboto}
+\setmonofont{Fira Code} 
+
+% --- Control de "Achatamiento" ---
+\linespread{1.15} % El interlineado que IEEE odia pero nosotros amamos
+\setlength{\parskip}{0.5ex plus 0.2ex minus 0.2ex} % Espacio entre párrafos
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+
+% --- Parche de Seguridad ---
+\makeatletter
+\ifx\IEEEPARSTART\undefined
+  \newcommand{\IEEEPARSTART}[2]{{\large\sffamily\textbf{#1}}#2}
+\fi
+\makeatother
+
+\graphicspath{{research/assets/}{assets/}} 
+
+% --- Encabezado Moderno ---
+\makeatletter
+\def\ps@IEEEtitlepagestyle{
+  \def\@oddhead{\parbox{\textwidth}{
+    \vspace{0cm}
+    \includegraphics[width=1.1cm]{logo_DomoNode} 
+    \hfill 
+    \small\sffamily\itshape Proyecto DomoNode | Reporte Técnico v1.0
+    \vspace{0.6cm}
+  }}%
+  \def\@evenhead{}
+}
+\makeatother
+
+\begin{document}
+
+\title{\sffamily Nodos IoT basados en PIC16F1939: Arquitectura DomoNode}
+
+\author{Marcos Bernard Calixto López,~\IEEEmembership{Ingeniero Electrónico}%
+\thanks{Desarrollo integral bajo Fedora Linux y compilador XC8.}}
+
+\maketitle
+\thispagestyle{IEEEtitlepagestyle}
+
+\begin{abstract}
+% El resumen ahora con Sans Serif y más aire
+{\sffamily\fontsize{9.5pt}{12pt}\selectfont
+Este documento técnico presenta la implementación del ecosistema \textbf{DomoNode}. Se detalla el flujo de trabajo bajo \textbf{Fedora Linux}, el uso de compiladores \textbf{XC8} y la integración de servicios en la nube como \textbf{Koyeb} y \textbf{Supabase} para evitar el \textit{cold start}. El objetivo es demostrar que la documentación técnica de alta fidelidad y bajo peso (34.4 kB) es un estándar de calidad en la ingeniería moderna.}
+\end{abstract}
+
+\begin{IEEEkeywords}
+{\sffamily Sistemas Embebidos, PIC12F675, IoT, LaTeX, Cloud Computing.}
+\end{IEEEkeywords}
+
+\section{\sffamily Introducción}
+\IEEEPARSTART{E}{l} desarrollo de sistemas domóticos requiere una simbiosis entre el hardware de bajo nivel y el software de gestión. DomoNode utiliza microcontroladores de 8 bits para tareas atómicas, garantizando eficiencia energética y robustez.
+
+\section{\sffamily Conclusión}
+La estandarización bajo el formato IEEE con tipografía moderna permite una comunicación clara de los avances técnicos, facilitando la integración en portafolios profesionales.
+
+\begin{thebibliography}{1}
+\bibitem{domo1}
+M. B. Calixto López, ``Proyecto DomoNode: Especificaciones v1.0,'' 2026.
+\end{thebibliography}
+
+\end{document}
