@@ -184,17 +184,42 @@ Como se observa en la Figura \ref{fig:esquema_v1}, se implementa una etapa de po
 
 \section{Construcción del Prototipo}
 Implementación física y carga de firmware.
-\subsection{Montaje en Protoboard}
-% Pendiente: Descripción del ensamblaje físico del PIC16F1939.
+
 \subsection{Firmware (XC8)}
-% Pendiente: Lógica de inicialización de registros y bucle principal.
+Se implementa la lógica de control en C utilizando el compilador XC8. El código establece el \textit{Heartbeat} mediante retardos bloqueantes de \SI{500}{\milli\second}, precedidos por una ráfaga de inicio para validación de \textit{Power-on Reset}. El firmware final para producción utiliza la configuración \texttt{MFINTOSC} a \SI{500}{\kilo\hertz} para optimizar la eficiencia energética del nodo.
+
+\subsection{Montaje en Protoboard}
+(pendiente)
 
 \section{Despliegue y Entrega (Pruebas)}
-Criterios de aceptación y validación del prototipo físico.
-% Pendiente: Resultados de las pruebas de ráfaga y estabilidad.
+
+\subsection{Entorno de Simulación y Ajustes Técnicos}
+Para la validación funcional se utilizó \textbf{PICSimLab v0.9.2} emulando una placa \textit{McLab2}. Durante las pruebas iniciales, se identificó una limitación en el paso de tiempo del simulador al operar por debajo de \SI{1}{\mega\hertz}. 
+
+Para garantizar una correlación 1:1 con el tiempo real en el osciloscopio virtual, se optó por una \textbf{estrategia de ajuste de validación}:
+\begin{itemize}
+    \item Se reconfiguró el registro \texttt{OSCCON} a \texttt{0x30} (\SI{1}{\mega\hertz}).
+    \item Se actualizó la macro \texttt{\_XTAL\_FREQ} a \SI{1}{\mega\hertz} para resincronizar los retardos.
+\end{itemize}
+
+\subsection{Resultados en Osciloscopio}
+Tras el ajuste, el análisis de señales (Figura \ref{fig:osciloscopio}) confirmó la precisión del firmware:
+\begin{itemize}
+    \item \textbf{Ciclo Completo:} \SI{1000.000}{\milli\second} (Exactitud del 100\% en simulación).
+    \item \textbf{Duty Cycle:} 50\%, con semiciclos de \SI{500}{\milli\second}.
+\end{itemize}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{HB1Hz.png}
+    \caption{Validación del Heartbeat a 1Hz en osciloscopio virtual.}
+    \label{fig:osciloscopio}
+\end{figure}
 
 \section{Retroalimentación (Feedback)}
-Análisis de la iteración para mejora continua.
-% Pendiente: Notas para la Iteración 02 (Diferencias simulación vs. realidad).
-
+La Iteración 01 valida con éxito la estabilidad de la \textbf{Capa 0}. Como puntos clave para la Iteración 02 se definen:
+\begin{itemize}
+    \item \textbf{Optimización Energética:} Retornar a la frecuencia de \SI{500}{\kilo\hertz} en el prototipo físico para reducir el consumo de corriente dinámico.
+    \item \textbf{Escalabilidad:} Implementar el manejo del LCD para mostrar estados de red, utilizando los tiempos de instrucción ya validados en esta fase.
+\end{itemize}
 \end{document}
