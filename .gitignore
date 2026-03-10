@@ -13,17 +13,31 @@ ccreport/
 *.i
 *.rlf
 
-# --- Documentación (LaTeX) ---
+# --- LaTeX ---
+# Ignorar la carpeta de compilación completa
 research/build/
-*.tex
 *.aux
+*.fdb_latexmk
+*.fls
 *.log
 *.out
 *.toc
-#*.pdf
-*.fdb_latexmk
-*.fls
+*.synctex.gz
 
 # --- Sistema y otros ---
 .DS_Store
 Thumbs.db
+
+# --- KiCad ---
+# Archivos temporales y de bloqueo
+*.lck
+*#
+_autosave-*
+#auto_saved_files#
+fp-info-cache
+
+# Backups
+*-backups/
+*.bak
+*.kicad_prl
+
