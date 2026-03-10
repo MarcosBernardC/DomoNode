@@ -1,7 +1,7 @@
 # --- Configuración de XC8 v2.40 ---
 XC8_BIN   = /opt/microchip/xc8/v2.40/bin
 CC        = $(XC8_BIN)/xc8-cc
-CHIP      = 12F675
+CHIP      = 16F1939
 
 # --- Configuración de LaTeX (Estándar LuaLaTeX) ---
 LATEXMK   = latexmk
