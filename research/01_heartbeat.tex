@@ -189,6 +189,23 @@ Implementación física y carga de firmware.
 Se implementa la lógica de control en C utilizando el compilador XC8. El código establece el \textit{Heartbeat} mediante retardos bloqueantes de \SI{500}{\milli\second}, precedidos por una ráfaga de inicio para validación de \textit{Power-on Reset}. El firmware final para producción utiliza la configuración \texttt{MFINTOSC} a \SI{500}{\kilo\hertz} para optimizar la eficiencia energética del nodo.
 
 \subsection{Montaje en Protoboard}
+El circuito fue ensamblado sobre protoboard siguiendo el esquemático de la Figura~\ref{fig:esquema_v1}.
+La alimentación se suministró desde el bus de \SI{5}{\volt} del programador PICKit2 vía ICSP,
+sin fuente externa adicional en esta iteración.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.72\textwidth]{HeartbeatSuperior.jpg}
+    \caption{Montaje físico del DomoNode V1 en protoboard — Iteración 01.}
+    \label{fig:protoboard}
+\end{figure}
+
+La validación en hardware real confirmó el comportamiento simulado: el LED conectado a \textbf{RD7 (Pin~30)}
+oscila a \SI{1}{\hertz} con un \textit{duty cycle} del 50\%, precedido por la ráfaga de inicio
+que distingue el arranque de la ejecución normal.
+
+\vspace{0.5cm}
+\noindent\textbf{Demostración en video:}
 (pendiente)
 
 \section{Despliegue y Entrega (Pruebas)}
