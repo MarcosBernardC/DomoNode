@@ -1,84 +1,146 @@
-# --- Configuración de XC8 v2.40 ---
-XC8_BIN   = /opt/microchip/xc8/v2.40/bin
-CC        = $(XC8_BIN)/xc8-cc
-CHIP      = 16F1939
+# ==============================================================================
+#  DomoNode — Makefile
+#  Compilador : XC8 v2.40 (xc8-cc)
+#  Target     : PIC16F1939
+#  Docs       : LuaLaTeX (latexmk)
+# ==============================================================================
 
-# --- Configuración de LaTeX (Estándar LuaLaTeX) ---
-LATEXMK   = latexmk
-L_BUILD   = research/build
-L_FLAGS   = -lualatex -outdir=$(L_BUILD) -interaction=nonstopmode -halt-on-error
+# ------------------------------------------------------------------------------
+#  Toolchain — XC8
+# ------------------------------------------------------------------------------
+XC8_BIN := /opt/microchip/xc8/v2.40/bin
+CC      := $(XC8_BIN)/xc8-cc
+CHIP    := 16F1939
 
-# --- Rutas de Firmware ---
-FW_SRC    = firmware/src/main.c
-FW_BUILD  = firmware/build
-FW_TARGET = $(FW_BUILD)/main.hex
+# ------------------------------------------------------------------------------
+#  Programador — PK2CMD (ICSP)
+# ------------------------------------------------------------------------------
+PK2       := sudo pk2cmd
+PK2_CHIP  := PIC$(CHIP)
+PK2_FLAGS := -p$(PK2_CHIP)
 
-# --- Detección Dinámica de LaTeX en research/ ---
-TEX_SOURCES := $(shell find research -maxdepth 1 -name "*.tex")
-TEX_TARGETS := $(basename $(notdir $(TEX_SOURCES)))
+# ------------------------------------------------------------------------------
+#  Firmware
+# ------------------------------------------------------------------------------
+FW_SRC    := firmware/src/main.c
+FW_BUILD  := firmware/build
+FW_TARGET := $(FW_BUILD)/main.hex
+CC_FLAGS  := -mcpu=$(CHIP) -std=c90 -O2 -mccreport
 
-# --- Regla Principal ---
+# ------------------------------------------------------------------------------
+#  Documentación — LaTeX
+# ------------------------------------------------------------------------------
+LATEXMK      := latexmk
+L_BUILD      := research/build
+L_FLAGS      := -lualatex -outdir=$(L_BUILD) -interaction=nonstopmode -halt-on-error
+
+TEX_SOURCES  := $(shell find research -maxdepth 1 -name "*.tex")
+TEX_TARGETS  := $(basename $(notdir $(TEX_SOURCES)))
+
+# ------------------------------------------------------------------------------
+#  Regla principal
+# ------------------------------------------------------------------------------
+.DEFAULT_GOAL := all
+
 all: firmware
 
-# --- Sección de Firmware ---
+# ==============================================================================
+#  FIRMWARE
+# ==============================================================================
+
 firmware: $(FW_BUILD) $(FW_TARGET)
-	@if [ ! -z "$$(find $(FW_TARGET) -mmin -0.01 2>/dev/null)" ]; then \
+	@if [ -n "$$(find $(FW_TARGET) -mmin -0.01 2>/dev/null)" ]; then \
 		echo "------------------------------------------------"; \
-		echo "✅ FIRMWARE [$(CHIP)]: Compilación exitosa."; \
-		echo "📦 Binario listo en: $(FW_TARGET)"; \
+		echo "✅ FIRMWARE [$(CHIP)]: Compilación exitosa.";      \
+		echo "📦 Binario listo en: $(FW_TARGET)";                \
+		echo "------------------------------------------------"; \
 	else \
 		echo "------------------------------------------------"; \
-		echo "☕ FIRMWARE [$(CHIP)]: El archivo $(FW_TARGET) ya está al día."; \
+		echo "☕ FIRMWARE [$(CHIP)]: $(FW_TARGET) ya está al día."; \
 		echo "------------------------------------------------"; \
 	fi
 
 $(FW_BUILD):
-	@mkdir -p $(FW_BUILD)
+	@mkdir -p $@
 
 $(FW_TARGET): $(FW_SRC)
 	@echo "🛠️  Compilando firmware desde $<..."
-	@$(CC) -mcpu=$(CHIP) -std=c90 -O2 -mccreport $< -o $@
+	@$(CC) $(CC_FLAGS) $< -o $@
 
-# --- Sección de Documentación ---
+# ==============================================================================
+#  ICSP — Programación en circuito
+# ==============================================================================
+
+# Verifica la conexión con el microcontrolador
+check:
+	@echo "🔍 Detectando $(PK2_CHIP)..."
+	@if $(PK2) $(PK2_FLAGS) -P | grep -q "Operation Succeeded"; then \
+		echo "✅ $(PK2_CHIP) detectado y listo.";                       \
+	else                                                                \
+		echo "❌ No se pudo detectar $(PK2_CHIP). Revisa el bus ICSP."; \
+		exit 1;                                                         \
+	fi
+
+# Graba el firmware en el PIC
+flash: $(FW_TARGET)
+	@echo "⚡ Programando $(PK2_CHIP) con $(FW_TARGET)..."
+	@$(PK2) $(PK2_FLAGS) -M -F$(FW_TARGET) -R
+	@echo "✅ Programación completada. Ejecutando firmware..."
+
+# Borra la memoria del PIC
+erase:
+	@echo "🧼 Borrando memoria de $(PK2_CHIP)..."
+	@$(PK2) $(PK2_FLAGS) -E
+	@echo "✅ Memoria borrada."
+
+# ==============================================================================
+#  DOCUMENTACIÓN — LaTeX
+# ==============================================================================
+
 docs: docs_info
 
 docs_info:
 	@echo "📝 Sistema de Documentación DomoNode (research/)"
-	@echo "Archivos detectados: $(TEX_TARGETS)"
-	@echo "Uso: make [nombre_del_archivo] (ej: make investigacion)"
+	@echo "   Archivos detectados : $(TEX_TARGETS)"
+	@echo "   Uso                 : make <nombre>  (ej: make investigacion)"
 	@echo "------------------------------------------------"
 
+# Regla genérica: compila cualquier .tex detectado en research/
 $(TEX_TARGETS): %:
-	@$(eval SOURCE_PATH := $(shell find research -name "$*.tex" -print -quit))
+	$(eval SOURCE_PATH := $(shell find research -name "$*.tex" -print -quit))
 	@mkdir -p $(L_BUILD)
-	@echo "📄 Generando: $(SOURCE_PATH) -> $(L_BUILD)/$@.pdf"
-	# Añadimos -f para ignorar falta de bibliografía y quitamos el silenciador temporalmente
+	@echo "📄 Generando: $(SOURCE_PATH) → $(L_BUILD)/$@.pdf"
 	@$(LATEXMK) $(L_FLAGS) -f -jobname=$@ $(SOURCE_PATH)
 	@echo "✅ DOCS: $(L_BUILD)/$@.pdf generado."
 
-## --- Sección de Limpieza Explícita ---
+# ==============================================================================
+#  LIMPIEZA
+# ==============================================================================
 
-# Limpia exclusivamente el firmware del PIC12F675
+# Elimina artefactos de compilación del firmware
 clean-firmware:
-	@echo "🧹 Limpiando compilación de Firmware..."
+	@echo "🧹 Limpiando firmware..."
 	@rm -rf $(FW_BUILD) ccreport
-	@echo "Firmware limpio."
+	@echo "   Firmware limpio."
 
-# Limpia exclusivamente la carpeta build de research (LaTeX)
+# Elimina artefactos de compilación de LaTeX
 clean-research:
-	@echo "🧹 Limpiando compilación de LaTeX..."
+	@echo "🧹 Limpiando LaTeX..."
 	@rm -rf $(L_BUILD)
-	@echo "Research limpio."
+	@echo "   Research limpio."
 
-# Limpia TODO el proyecto (Requiere intención explícita)
-clean-all: clean-firmware clean-research
-	@echo "✨ Todo el proyecto DomoNode ha sido purgado."
-
-# Limpieza de temporales de LaTeX pero preservando los PDFs resultantes
+# Elimina temporales de LaTeX preservando los PDFs
 distclean:
-	@echo "🧹 Limpiando temporales en $(L_BUILD)..."
+	@echo "🧹 Limpiando temporales LaTeX en $(L_BUILD)..."
 	@$(LATEXMK) -c -outdir=$(L_BUILD)
-	@find $(L_BUILD) -type f ! -name '*.pdf' -delete 2>/dev/null || true
+	@find $(L_BUILD) -type f ! -name "*.pdf" -delete 2>/dev/null || true
+	@echo "   Temporales eliminados. PDFs conservados."
 
-# Eliminamos la regla 'clean' a secas para evitar borrados accidentales
-.PHONY: all firmware clean-all clean-firmware clean-research distclean docs docs_info $(TEX_TARGETS)
+# Purga completa del proyecto (requiere intención explícita)
+clean-all: clean-firmware clean-research
+	@echo "✨ Proyecto DomoNode purgado por completo."
+
+# ------------------------------------------------------------------------------
+.PHONY: all firmware check flash erase \
+        docs docs_info $(TEX_TARGETS)   \
+        clean-firmware clean-research distclean clean-all
