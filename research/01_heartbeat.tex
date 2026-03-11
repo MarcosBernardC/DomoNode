@@ -15,6 +15,7 @@
 \usepackage{siunitx}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
+\usepackage{float}
 
 % --- Definición de Colores ---
 \definecolor{BLogicNavy}{HTML}{002E5D} 
@@ -138,6 +139,7 @@ Para el nodo \textbf{DomoNode}, se ha identificado la necesidad de una señal de
 \section{Planificación Rápida}
 En esta etapa del \textbf{\faseactual}, el sprint de diseño se centra en la \textbf{Capa 0 (Hardware Core)}, estableciendo los cimientos para las capas superiores del modelo OSI mediante los siguientes objetivos:
 \begin{itemize}
+    \setlength{\itemsep}{2pt}
     \item Selección de un pin de salida dedicado exclusivamente a diagnóstico visual.
     \item Configuración del oscilador interno (\texttt{INTOSC}) para minimizar el BOM (\textit{Bill of Materials}).
     \item Definición de una secuencia de inicio que diferencie el estado de arranque de la ejecución normal.
@@ -154,33 +156,30 @@ F_{CY} = \frac{F_{OSC}}{4} \implies \frac{\SI{500}{\kilo\hertz}}{4} = \SI{125}{\
 \end{equation}
 
 \subsection{Capa Física: Asignación de Recursos (I/O Mapping)}
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \caption{Especificaciones Técnicas de la Iteración 01}
-    \vspace{0.3cm}
+    \vspace{0.2cm}
     \begin{tabular}{@{}llll@{}}
         \toprule
         \textbf{Recurso} & \textbf{Función} & \textbf{Capa} & \textbf{Pin / Valor} \\
         \midrule
         System Clock & Internal Oscillator & \textbf{0} (Register) & 0x68 (500kHz) \\
-        Indicator LED & Heartbeat Status & \textbf{1} (Electrical) & RD7 (Pin 30) \\
-        Reset Vector & MCLR Logic & \textbf{0} (Fuse) & Pin 1 (RE3) \\
+        Indicator LED & Heartbeat Status    & \textbf{1} (Electrical) & RD7 (Pin 30) \\
+        Reset Vector  & MCLR Logic          & \textbf{0} (Fuse)      & Pin 1 (RE3)  \\
         \bottomrule
     \end{tabular}
 \end{table}
 
 \subsection{Esquemático del Módulo de Validación}
-Como se observa en la Figura \ref{fig:esquema_v1}, se implementa una etapa de potencia con un transistor NPN para el control del LED, desacoplo de alimentación y un nodo de reset físico mediante el pin MCLR[cite: 7, 30, 35].
+Como se observa en la Figura~\ref{fig:esquema_v1}, se implementa una etapa de potencia con un transistor NPN para el control del LED, desacoplo de alimentación y un nodo de reset físico mediante el pin MCLR.
 
-\begin{figure}[!ht] % '!' fuerza la posición para evitar el salto de página
+\begin{figure}[H]
     \centering
-    % trim= izquierda abajo derecha arriba, clip recorta el espacio sobrante
-    \includegraphics[width=0.7\textwidth, trim=0 0 0 0, clip]{DomoNode_V1_inkscape.pdf} 
+    \includegraphics[width=0.7\textwidth, trim=0 0 0 0, clip]{DomoNode_V1_inkscape.pdf}
     \caption{Diseño de hardware para la validación del System Heartbeat (Capa Física).}
     \label{fig:esquema_v1}
 \end{figure}
-
-% Eliminamos el \clearpage para que el texto de la Sección 4 suba
 
 \section{Construcción del Prototipo}
 Implementación física y carga de firmware.
@@ -189,44 +188,39 @@ Implementación física y carga de firmware.
 Se implementa la lógica de control en C utilizando el compilador XC8. El código establece el \textit{Heartbeat} mediante retardos bloqueantes de \SI{500}{\milli\second}, precedidos por una ráfaga de inicio para validación de \textit{Power-on Reset}. El firmware final para producción utiliza la configuración \texttt{MFINTOSC} a \SI{500}{\kilo\hertz} para optimizar la eficiencia energética del nodo.
 
 \subsection{Montaje en Protoboard}
-El circuito fue ensamblado sobre protoboard siguiendo el esquemático de la Figura~\ref{fig:esquema_v1}.
-La alimentación se suministró desde el bus de \SI{5}{\volt} del programador PICKit2 vía ICSP,
-sin fuente externa adicional en esta iteración.
+El circuito fue ensamblado sobre protoboard siguiendo el esquemático de la Figura~\ref{fig:esquema_v1}. La alimentación se suministró desde el bus de \SI{5}{\volt} del programador PICKit2 vía ICSP, sin fuente externa adicional en esta iteración.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.72\textwidth]{HeartbeatSuperior.jpg}
+    \includegraphics[width=0.5\textwidth]{HeartbeatSuperior.jpg}
     \caption{Montaje físico del DomoNode V1 en protoboard — Iteración 01.}
     \label{fig:protoboard}
 \end{figure}
 
-La validación en hardware real confirmó el comportamiento simulado: el LED conectado a \textbf{RD7 (Pin~30)}
-oscila a \SI{1}{\hertz} con un \textit{duty cycle} del 50\%, precedido por la ráfaga de inicio
-que distingue el arranque de la ejecución normal.
+La validación en hardware real confirmó el comportamiento simulado: el LED conectado a \textbf{RD7 (Pin~30)} oscila a \SI{1}{\hertz} con un \textit{duty cycle} del 50\%, precedido por la ráfaga de inicio que distingue el arranque de la ejecución normal.
 
-\vspace{0.5cm}
-\noindent\textbf{Demostración en video:}
-(pendiente)
+\vspace{0.3cm}
+\noindent\textbf{Demostración en video:} (pendiente)
 
 \section{Despliegue y Entrega (Pruebas)}
 
 \subsection{Entorno de Simulación y Ajustes Técnicos}
-Para la validación funcional se utilizó \textbf{PICSimLab v0.9.2} emulando una placa \textit{McLab2}. Durante las pruebas iniciales, se identificó una limitación en el paso de tiempo del simulador al operar por debajo de \SI{1}{\mega\hertz}. 
-
-Para garantizar una correlación 1:1 con el tiempo real en el osciloscopio virtual, se optó por una \textbf{estrategia de ajuste de validación}:
+Para la validación funcional se utilizó \textbf{PICSimLab v0.9.2} emulando una placa \textit{McLab2}. Durante las pruebas iniciales, se identificó una limitación en el paso de tiempo del simulador al operar por debajo de \SI{1}{\mega\hertz}. Para garantizar una correlación 1:1 con el tiempo real en el osciloscopio virtual, se optó por una \textbf{estrategia de ajuste de validación}:
 \begin{itemize}
+    \setlength{\itemsep}{2pt}
     \item Se reconfiguró el registro \texttt{OSCCON} a \texttt{0x30} (\SI{1}{\mega\hertz}).
     \item Se actualizó la macro \texttt{\_XTAL\_FREQ} a \SI{1}{\mega\hertz} para resincronizar los retardos.
 \end{itemize}
 
 \subsection{Resultados en Osciloscopio}
-Tras el ajuste, el análisis de señales (Figura \ref{fig:osciloscopio}) confirmó la precisión del firmware:
+Tras el ajuste, el análisis de señales (Figura~\ref{fig:osciloscopio}) confirmó la precisión del firmware:
 \begin{itemize}
+    \setlength{\itemsep}{2pt}
     \item \textbf{Ciclo Completo:} \SI{1000.000}{\milli\second} (Exactitud del 100\% en simulación).
     \item \textbf{Duty Cycle:} 50\%, con semiciclos de \SI{500}{\milli\second}.
 \end{itemize}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{HB1Hz.png}
     \caption{Validación del Heartbeat a 1Hz en osciloscopio virtual.}
@@ -236,6 +230,7 @@ Tras el ajuste, el análisis de señales (Figura \ref{fig:osciloscopio}) confirm
 \section{Retroalimentación (Feedback)}
 La Iteración 01 valida con éxito la estabilidad de la \textbf{Capa 0}. Como puntos clave para la Iteración 02 se definen:
 \begin{itemize}
+    \setlength{\itemsep}{2pt}
     \item \textbf{Optimización Energética:} Retornar a la frecuencia de \SI{500}{\kilo\hertz} en el prototipo físico para reducir el consumo de corriente dinámico.
     \item \textbf{Escalabilidad:} Implementar el manejo del LCD para mostrar estados de red, utilizando los tiempos de instrucción ya validados en esta fase.
 \end{itemize}
