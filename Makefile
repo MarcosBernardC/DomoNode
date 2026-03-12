@@ -74,11 +74,13 @@ $(FW_TARGET): $(FW_SRC)
 # Verifica la conexión con el microcontrolador
 check:
 	@echo "🔍 Detectando $(PK2_CHIP)..."
-	@if $(PK2) $(PK2_FLAGS) -P | grep -q "Operation Succeeded"; then \
-		echo "✅ $(PK2_CHIP) detectado y listo.";                       \
-	else                                                                \
-		echo "❌ No se pudo detectar $(PK2_CHIP). Revisa el bus ICSP."; \
-		exit 1;                                                         \
+	@RESULT=$$($(PK2) $(PK2_FLAGS) -I 2>&1); \
+	DEVID=$$(echo "$$RESULT" | grep "Device ID" | awk '{print $$NF}'); \
+	if [ "$$DEVID" = "0000" ]; then \
+		echo "❌ Bus ICSP sin respuesta. Revisa MCLR, PGD y PGC."; \
+		exit 1;                                                     \
+	else \
+		echo "✅ $(PK2_CHIP) detectado. Device ID: $$DEVID";        \
 	fi
 
 # Graba el firmware en el PIC
