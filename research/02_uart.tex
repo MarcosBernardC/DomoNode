@@ -166,7 +166,7 @@ Se integra un conversor USB-TTL al nodo \textbf{DomoNode}. Se mantiene el LED de
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=0.7\textwidth]{DomoNode_UART_v2.pdf}
+    \includegraphics[width=0.5\textwidth]{DomoNode_squematic_inkscape.pdf}
     \caption{Diagrama de interconexión para validación de telemetría UART.}
     \label{fig:esquema_uart}
 \end{figure}
@@ -176,9 +176,19 @@ El montaje en protoboard valida la ráfaga de datos cada \SI{60}{\second}. Se ob
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=0.5\textwidth]{Montaje_UART_Iteracion02.jpg}
+    \includegraphics[width=0.5\textwidth]{research/assets/uartBcharProtoboardTest.jpg}
     \caption{Prototipo físico DomoNode V2: Pruebas de comunicación serial.}
     \label{fig:protoboard_v2}
+\end{figure}
+
+\subsection{Resultados del Monitoreo Digital}
+La validación del flujo de datos se realizó mediante el software de monitoreo industrial \textbf{HTerm} sobre la distribución \textbf{Fedora}. Se confirmó la recepción íntegra del testigo de transmisión (\textit{testigo 'B'}) con una periodicidad de \SI{1}{\second}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{research/assets/uartBcharHtermTest.png}
+    \caption{Monitoreo multiformato en HTerm: Validación del testigo de transmisión. Se observa la consistencia entre el carácter ASCII 'B', su valor hexadecimal (0x42) y su representación binaria, confirmando la estabilidad del baudaje a \SI{500}{\kilo\hertz}.}
+    \label{fig:hterm_success}
 \end{figure}
 
 \vspace{0.3cm}
