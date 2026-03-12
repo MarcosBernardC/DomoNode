@@ -6,6 +6,23 @@
 \usepackage{unicode-math}
 \usepackage{graphicx}
 
+% --- Layout y Estética ---
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage[table]{xcolor} 
+\usepackage{microtype}
+\usepackage{siunitx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{float}
+
+% --- Definición de Colores ---
+\definecolor{BLogicNavy}{HTML}{002E5D} 
+\definecolor{IndustrialBlue}{HTML}{005EB8}
+\definecolor{LightGray}{HTML}{E0E0E0}
+
+% --- Configuración de Fuentes ---
 \setmainfont{libertinusserif-regular.otf}[
     BoldFont = libertinusserif-bold.otf,
     ItalicFont = libertinusserif-italic.otf,
@@ -14,116 +31,165 @@
 \setmathfont{STIXTwoMath-Regular.otf}
 \setmonofont{lmmono10-regular.otf}
 
-% --- Layout y Estética ---
-\usepackage{amsmath}
-\usepackage{booktabs}
-\usepackage{geometry}
-\usepackage{xcolor}
-\usepackage{microtype}
-\usepackage{siunitx}
-\usepackage{fancyhdr}
+\geometry{top=3cm, bottom=3cm, left=2.5cm, right=2.5cm}
 
-\geometry{top=2.5cm, bottom=2.5cm, left=3cm, right=3cm}
-\definecolor{DomoBlue}{HTML}{004A8B}
+% --- Personalización de Títulos (Estética DIN-Minimal) ---
+\titleformat{\section}
+  {\color{BLogicNavy}\normalfont\Large\bfseries\scshape}
+  {\thesection}{1em}{}[\titlerule]
 
-% --- Configuración de Pie de Página ---
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {\color{BLogicNavy}\textbullet\ \thesubsection}{1em}{}
+
+% --- Definición de la Fase Actual ---
+\newcommand{\faseactual}{MVP: Prototipado Iterativo} 
+
+% --- Pie de Página ---
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0.4pt}
-\fancyfoot[L]{\footnotesize \color{gray} DomoNode | \textit{MVP Phase}}
-\fancyfoot[C]{\footnotesize \color{gray} Pipeline: MVP $\rightarrow$ SPIRAL $\rightarrow$ V-Model XT}
-\fancyfoot[R]{\footnotesize \thepage}
+\renewcommand{\footrulewidth}{0.6pt} 
+
+\fancyfoot[L]{\footnotesize \color{gray} \textbf{DOMONODE} $|$ \faseactual}
+\fancyfoot[R]{\footnotesize \color{gray} Página \thepage}
+
+% --- Metadatos PDF ---
+\usepackage[pdfauthor={Marcos Bernard Calixto Lopez},
+            pdftitle={DomoNode - Iteración 02: UART Timing Validation},
+            pdfsubject={Ingeniería Electrónica - UART Analysis},
+            pdfkeywords={IoT, PIC16F1939, UART, XC8, MVP},
+            pdfstartview={FitH},
+            colorlinks=true,
+            linkcolor=BLogicNavy,
+            urlcolor=IndustrialBlue]{hyperref}
+
+% --- Ruta de búsqueda para imágenes y PDFs ---
+\graphicspath{{research/assets/}{assets/}}
 
 \begin{document}
 
-% --- PORTADA TÉCNICA ---
+% --- PORTADA DIN-INDUSTRIAL ---
 \begin{titlepage}
-    \centering
-    \vspace*{1cm}
-    {\color{DomoBlue}\Huge\textbf{DOMONODE PROJECT}\par}
-    \vspace{0.5cm}
-    {\Large\textit{Nodo IoT de Monitoreo Ambiental con Capacidades de Inferencia en el Borde}\par}
+    \hrule height 2pt
+    \vspace{0.4cm}
     
-    \vspace{2cm}
-    \hrule
-    \vspace{0.8cm}
-    {\huge\textbf{Research Report: UART Timing}\par}
-    \vspace{0.3cm}
-    {\large Análisis de Temporización y Eficiencia Energética para Telemetría Crítica\par}
-    \vspace{0.8cm}
-    \hrule
+    \begin{flushleft}
+        \begin{minipage}[t]{0.60\textwidth}
+            {\color{BLogicNavy}\Large\addfontfeatures{LetterSpace=15}\textbf{DOMONODE PROJECT}\par}
+            \vspace{0.12cm}
+            {\color{gray}\footnotesize\scshape Nodo IoT de Monitoreo Ambiental | Edge Intelligence}
+        \end{minipage}
+        \begin{minipage}[t]{0.39\textwidth}
+            \raggedleft
+            {\color{gray}\scriptsize 
+            \textbf{FASE} \ $|$ \ \faseactual \\ 
+            \textbf{ITERACIÓN} \ $|$ \ 02}
+        \end{minipage}
+    \end{flushleft}
     
-    \vspace{2cm}
-    \textbf{Preparado por:}\\
-    Ingeniería Electrónica\\
-    
-    \vspace{1cm}
-    \textbf{Fase del Proyecto:}\\
-    MVP (Prototipado Iterativo)\\
-    Hardware de Validación: PIC16F1939
-    
+    \vspace{5.5cm}
+
+    \begin{flushleft}
+        {\color{gray}\footnotesize\scshape Research \& Hardware Validation}\par
+        \vspace{0.25cm}
+        {\Huge\addfontfeatures{LetterSpace=2}\textbf{UART Timing \& Telemetry}\par}
+        \vspace{0.4cm}
+        {\color{BLogicNavy}\hrule height 1.8pt width 11cm} 
+        \vspace{0.6cm}
+        {\small\textsf{Validación de Capa de Enlace \ $|$ \ Optimización de Consumo}}
+    \end{flushleft}
+
     \vfill
-    % \includegraphics[width=0.3\textwidth]{../assets/logo_DomoNode.pdf}\par 
-    \vspace{1cm}
+
+    \begin{flushleft}
+        \begin{minipage}{0.5\textwidth}
+            \hrule width 3cm
+            \vspace{0.3cm}
+            {\footnotesize\color{gray}\scshape Responsable del Proyecto}\\
+            \vspace{0.15cm}
+            \textbf{Marcos Bernard Calixto López}\\
+            {\small Ingeniería Electrónica}
+        \end{minipage}
+    \end{flushleft}
+
+    \vspace{1.5cm}
     
-    {\large \today \par}
+    \hrule height 0.6pt
+    \vspace{0.2cm}
+    \begin{minipage}[t]{0.65\textwidth}
+        {\color{gray}\tiny \textcopyright \ 2026 Marcos Bernard Calixto López. \\ Algunos derechos reservados. Licencia CC BY-NC-SA 4.0.}
+    \end{minipage}
+    \begin{minipage}[t]{0.34\textwidth}
+        \raggedleft
+        {\color{gray}\footnotesize Santiago de Surco, \today}
+    \end{minipage}
 \end{titlepage}
 
 \newpage
-\thispagestyle{fancy}
 
-\section{Introducción}
-Este reporte técnico detalla la viabilidad de la comunicación asíncrona serial (UART) operando a una frecuencia de oscilación crítica de \SI{500}{\kilo\hertz} en la arquitectura del microcontrolador \textbf{PIC16F1939}. El objetivo principal de esta fase del \textbf{Producto Mínimo Viable (MVP)} es validar la integridad de la telemetría y optimizar el perfil de consumo, estableciendo los cimientos de hardware necesarios para la futura implementación de \textbf{algoritmos de inferencia de estado ambiental} directamente en el nodo (\textit{Edge Intelligence}).
+% --- CUERPO DEL DOCUMENTO ---
 
-\section{Fundamentación Matemática}
-El generador de baudios (\textit{Baud Rate Generator} - BRG) se rige por la configuración de los registros \texttt{TXSTA} y \texttt{BAUDCON}. La resolución del divisor está definida por la ecuación fundamental:
+\section{Comunicación: Requerimientos de Telemetría}
+Para la evolución del ecosistema \textbf{DomoNode}, se requiere establecer un canal de comunicación asíncrono robusto que permita el envío de tramas de sensores hacia una etapa de agregación. El reto técnico reside en mantener la integridad de los datos operando a una frecuencia de oscilación baja (\SI{500}{\kilo\hertz}) para maximizar la eficiencia energética.
 
+\section{Planificación y Modelado}
+En esta segunda iteración, el enfoque se desplaza de la señal de diagnóstico (\textit{Heartbeat}) hacia la \textbf{Capa de Enlace}. Se utiliza el generador de baudios de 16 bits para mitigar errores de cuantización.
+
+\subsection{Análisis de Error ($F_{OSC} = \SI{500}{\kilo\hertz}$)}
+Utilizando el modo \texttt{BRG16=1}, se valida matemáticamente la estabilidad a \SI{9600}{bps}:
 \begin{equation}
-BaudRate = \frac{F_{OSC}}{n \cdot ([SPBRGH:SPBRGL] + 1)}
+BaudRate = \frac{\SI{500000}{}}{4 \cdot (12 + 1)} = \SI{9615.38}{bps} \implies \text{Error: } \SI{0.16}{\percent}
 \end{equation}
 
-\section{Análisis de Error y Resolución}
-A $F_{OSC} = \SI{500}{\kilo\hertz}$, la cuantización del baudaje en 8 bits presenta errores significativos. La implementación del modo de \textbf{16 bits} es imperativa para alcanzar la estabilidad necesaria en el bus.
-
-\begin{table}[h]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\caption{Matriz de Error de Baudaje ($F_{OSC} = \SI{500}{\kilo\hertz}$)}
-\vspace{3mm}
-\begin{tabular}{lcrcc}
-\toprule
-\textbf{Baud Target} & \textbf{Modo ($n$)} & \textbf{SPBRG} & \textbf{Baud Real} & \textbf{Error (\%)} \\ 
-\midrule
-\SI{300}{bps}  & 16 & 103 & 300.48 & \SI{0.16}{\percent} \\
-\SI{2400}{bps} & 16 & 12  & 2403.85 & \SI{0.16}{\percent} \\
-\SI{4800}{bps} & 4  & 25  & 4807.69 & \SI{0.16}{\percent} \\
-\textbf{\SI{9600}{bps}} & \textbf{4} & \textbf{12} & \textbf{9615.38} & \textbf{\SI{0.16}{\percent}} \\
-\bottomrule
-\end{tabular}
+\subsection{Asignación de Recursos de Hardware}
+\begin{table}[H]
+    \centering
+    \caption{Especificaciones Técnicas - Iteración 02}
+    \vspace{0.2cm}
+    \begin{tabular}{@{}llll@{}}
+        \toprule
+        \textbf{Recurso} & \textbf{Función} & \textbf{Capa} & \textbf{Pin / Valor} \\
+        \midrule
+        UART TX      & Telemetría Serial   & \textbf{1} (Física) & RC6 (Pin 25) \\
+        UART RX      & Comandos/Config     & \textbf{1} (Física) & RC7 (Pin 26) \\
+        Baud Rate    & 9600 bps            & \textbf{2} (Enlace) & 0.16\% Error \\
+        \bottomrule
+    \end{tabular}
 \end{table}
 
-\section{Metodología de Desarrollo y Optimización}
-Siguiendo la metodología \textbf{V-Model XT} para la trazabilidad de requisitos, se establece la configuración de \SI{9600}{bps} para la fase de integración del MVP.
+\section{Construcción y Validación en Protoboard}
+Implementación física para corroborar el análisis matemático previo.
 
-\subsection{Demostración de Eficiencia por Ciclo de Trabajo}
-Se analiza el \textit{Duty Cycle} ($\eta$) considerando un tiempo de muestreo $T_s = \SI{60}{\second}$ y una trama de telemetría de \SI{12}{bytes}. El tiempo activo ($t_{active}$) es inversamente proporcional al baudaje:
+\subsection{Esquemático de Conexión Serial}
+Se integra un conversor USB-TTL al nodo \textbf{DomoNode}. Se mantiene el LED de \textit{Heartbeat} en \textbf{RD7} como monitor de estado del sistema durante la transmisión de ráfagas UART.
 
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.7\textwidth]{DomoNode_UART_v2.pdf}
+    \caption{Diagrama de interconexión para validación de telemetría UART.}
+    \label{fig:esquema_uart}
+\end{figure}
+
+\subsection{Pruebas de Campo e Integración}
+El montaje en protoboard valida la ráfaga de datos cada \SI{60}{\second}. Se observa que a \SI{9600}{bps}, el tiempo de ocupación del bus es mínimo (\SI{12.5}{\milli\second}), lo que permite al \textbf{PIC16F1939} retornar a estados de bajo consumo rápidamente.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.5\textwidth]{Montaje_UART_Iteracion02.jpg}
+    \caption{Prototipo físico DomoNode V2: Pruebas de comunicación serial.}
+    \label{fig:protoboard_v2}
+\end{figure}
+
+\vspace{0.3cm}
+\noindent\textbf{Demostración en video:} 
+\href{https://youtu.be/URL_DE_TU_VIDEO}{DomoNode Iteración 02 - Validación UART \& Timing}
+
+\section{Conclusiones de la Iteración 02}
+La validación física confirma que la configuración de 16 bits del BRG permite una comunicación fiable incluso a frecuencias de reloj reducidas. 
 \begin{itemize}
-    \item \textbf{A \SI{9600}{bps}:} $t_{active} \approx \SI{12.5}{\milli\second}$.
-    \begin{equation}
-    \eta_{9600} = \frac{\SI{12.5}{\milli\second}}{\SI{60}{\second}} \times 100 \approx \SI{0.02}{\percent}
-    \end{equation}
-    
-    \item \textbf{A \SI{300}{bps}:} $t_{active} \approx \SI{400}{\milli\second}$.
-    \begin{equation}
-    \eta_{300} = \frac{\SI{400}{\milli\second}}{\SI{60}{\second}} \times 100 \approx \SI{0.66}{\percent}
-    \end{equation}
+    \item \textbf{Resultado:} Error de baudaje dentro de los límites industriales ($<\SI{2}{\percent}$).
+    \item \textbf{Próximo Paso:} Integración del sensor de temperatura/humedad para generar tramas de datos reales en la Iteración 03.
 \end{itemize}
-
-\textbf{Análisis:} Aunque \SI{300}{bps} presenta un error matemático similar, el microcontrolador permanece activo un \textbf{\SI{3200}{\percent}} más de tiempo. Para un nodo con aspiraciones de inferencia constante, maximizar el tiempo de \textit{Sleep} mediante ráfagas rápidas de UART a \SI{9600}{bps} es la estrategia óptima.
-
-\section{Conclusión de Diseño}
-La configuración seleccionada para el \textbf{DomoNode} (\SI{9600}{bps}, \texttt{BRG16=1}, $n=4$) proporciona una robustez superior con un error insignificante del \SI{0.16}{\percent}. Esta decisión técnica asegura la integridad de la comunicación sin sacrificar la autonomía, cumpliendo con los hitos de la fase MVP antes de proceder a la optimización en la etapa \textbf{SPIRAL}.
 
 \end{document}
