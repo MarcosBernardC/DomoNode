@@ -4,42 +4,53 @@
 [![Compiler: XC8](https://img.shields.io/badge/Compiler-Microchip_XC8-orange.svg)](https://www.microchip.com/mplab/compilers)
 [![Docs: LuaLaTeX](https://img.shields.io/badge/Docs-LuaLaTeX-darkgreen.svg)](https://www.latex-project.org/)
 [![Cloud: Supabase](https://img.shields.io/badge/Cloud-Supabase-3ecf8e.svg)](https://supabase.com/)
-[![Platform: Koyeb](https://img.shields.io/badge/Platform-Koyeb-black.svg)](https://www.koyeb.com/)
 
-**DomoNode** es un nodo IoT avanzado enfocado en la eficiencia energética y la integración profesional de sistemas embebidos con servicios cloud modernos.
+**DomoNode** es un ecosistema IoT de grado industrial diseñado bajo una metodología de desarrollo iterativo. El proyecto escala desde el control de registros en silicio hasta la visualización de datos en la nube, priorizando la eficiencia energética y la documentación técnica rigurosa.
+
+---
+
+## 🏗️ Metodología de Desarrollo (MVP Iterativo)
+
+El progreso del proyecto se documenta a través de reportes técnicos generados en **LuaLaTeX**, vinculando cada iteración con una capa del modelo de sistemas:
+
+### [Iteración 01: System Heartbeat](./research/build/01_heartbeat.pdf) 📄
+
+- **Foco:** Capa 0 (Hardware Core).
+- **Hito:** Validación de estabilidad del oscilador interno y secuencia de arranque segura.
+- **Resultado:** Consumo optimizado mediante configuración MFINTOSC a 500kHz.
+- **🎥 [Ver Demostración](https://youtu.be/Y8ERYFn19mU)**
+
+### [Iteración 02: UART Timing & Telemetry](./research/build/02_uart.pdf) 📄
+
+- **Foco:** Capa 1 y 2 (Física y Enlace).
+- **Hito:** Implementación de telemetría serial con error de baudaje del 0.16%.
+- **Resultado:** Comunicación robusta a 9600 bps para transmisión de tramas de sensores.
+- **🎥 [Ver Demostración](https://youtu.be/vGGgzFn22VY?si=uIu9ADjewPjObTmR)**
+
+---
+
+## 🛠️ Stack Tecnológico
+
+| Dominio             | Tecnologías                                       |
+| :------------------ | :------------------------------------------------ |
+| **Firmware**        | Microchip XC8, PIC16F1939, Embedded C             |
+| **Hardware**        | KiCad (Schematic), Proteus/PICSimLab (Simulación) |
+| **Infraestructura** | Supabase (PostgreSQL), Koyeb (Deployment)         |
+| **Documentación**   | LuaLaTeX, Inkscape (Vector Graphics)              |
+
+---
 
 ## 🚀 Alcance del Proyecto
 
-Este proyecto integra un flujo de trabajo de ingeniería completo:
-
-- **Firmware:** Desarrollo robusto en **Embedded C** optimizado para bajo consumo.
-- **Documentación:** Generación de manuales técnicos y hojas de datos usando **LuaLaTeX**.
-- **Infraestructura:** Gestión de datos en tiempo real con **Supabase** y despliegue en **Koyeb**.
-- **Frontend:** Dashboard minimalista con estética _Glassmorphism_.
-
-## 🛠️ Tecnologías
-
-- **Microcontroladores:** ESP32 / PIC (XC8).
-- **Backend:** Python/Node.js (Koyeb) + PostgreSQL (Supabase).
-- **Frontend:** Vanilla JS / CSS Custom.
+1. **Eficiencia en el Edge:** Algoritmos de bajo consumo para nodos autónomos.
+2. **Integración Cloud:** Pipeline de datos real-time desde el microcontrolador al dashboard.
+3. **Documentación Técnica:** Manuales de ingeniería con estándares DIN-Minimal.
 
 ## Licencia 📄
 
 Este proyecto está bajo la licencia **Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**.
-
-Usted es libre de:
-
-- **Compartir**: Copiar y redistribuir el material en cualquier medio o formato.
-- **Adaptar**: Remezclar, transformar y construir sobre el material.
-
-Bajo los siguientes términos:
-
-- **Atribución**: Debe otorgar el crédito correspondiente a **Marcos Bernard Calixto**, proporcionar un enlace a la licencia e indicar si se realizaron cambios.
-- **No Comercial**: No puede utilizar el material con fines comerciales.
-- **Compartir Igual**: Si remezcla, transforma o crea a partir del material, debe distribuir sus contribuciones bajo la misma licencia que el original.
-
-Para más detalles, consulte ddel archivo [LICENSE](./LICENSE) o visite [Creative Commons](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+Desarrollado por **Marcos Bernard Calixto López**.
 
 ---
 
-_Proyecto desarrollado por Marcos Bernard C._
+_Ingeniería Electrónica | Hardware-to-Cloud Integration_
